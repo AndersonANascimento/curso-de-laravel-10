@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Support;
+use Illuminate\Http\Request;
+use App\DTO\CreateSupportDTO;
+use App\DTO\UpdateSupportDTO;
+use App\Services\SupportService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUpdateSupport;
-use App\Models\Support;
-use App\Services\SupportService;
-use Illuminate\Http\Request;
 
 class SupportController extends Controller
 {
@@ -38,12 +40,11 @@ class SupportController extends Controller
 
     public function store(StoreUpdateSupport $request, Support $support)
     {
-        $data = $request->validated();
-        $data['status'] = 'a';
+        $this->service->new(
+            CreateSupportDTO::makeFromRequest($request)
+        );
 
-        $support = $support->create($data);
-
-        return $this->index($support);
+        return redirect()->route('supports.index');
     }
 
     public function edit(string $id)
@@ -57,11 +58,13 @@ class SupportController extends Controller
 
     public function update(StoreUpdateSupport $request, Support $support, string|int $id)
     {
-        if (!$support = Support::find($id)) {
+        $support = $this->service->update(
+            UpdateSupportDTO::makeFromRequest($request)
+        );
+
+        if (!$support) {
             return back();
         }
-
-        $support->update($request->validated());
 
         return redirect()->route('supports.index');
     }
