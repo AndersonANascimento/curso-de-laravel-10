@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\SupportStatus;
 use App\Http\Controllers\Admin\{SupportController};
 use App\Http\Controllers\Site\SiteController;
 use Illuminate\Contracts\Auth\SupportsBasicAuth;
@@ -27,6 +28,12 @@ Route::prefix('supports')->group(function () {
 
 Route::get('/contato', [SiteController::class, 'contact']);
 
+Route::get('/test', function () {
+    // dd(SupportStatus::cases());
+    dd(array_column(SupportStatus::cases(), 'name'));
+});
+
 Route::get('/', function () {
     return view('welcome');
 });
+
