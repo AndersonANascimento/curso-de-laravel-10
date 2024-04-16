@@ -23,7 +23,7 @@ class SupportController extends Controller
             totalPerPage: $request->get('totalPerPage', 15),
             filter: $request->filter,
         );
-
+        // dd($supports);
         return view('admin/supports/index', compact('supports'));
     }
 
