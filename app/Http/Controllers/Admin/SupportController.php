@@ -20,11 +20,13 @@ class SupportController extends Controller
     {
         $supports = $this->service->paginate(
             page: $request->get('page', 1),
-            totalPerPage: $request->get('totalPerPage', 15),
+            totalPerPage: $request->get('per_page', 2),
             filter: $request->filter,
         );
         // dd($supports);
-        return view('admin/supports/index', compact('supports'));
+        $filters = ['filter' => $request->get('filter', '')];
+
+        return view('admin/supports/index', compact('supports', 'filters'));
     }
 
     public function show(string $id)
